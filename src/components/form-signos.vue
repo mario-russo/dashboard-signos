@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, reactive } from "vue";
-const tab = ref("aries");
+import { ref} from "vue";
+const tab = ref("aries"); 
+const textareaModel = ref(""); 
 const signosDoZodiaco = [
   "Áries",
   "Touro",
