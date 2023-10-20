@@ -21,12 +21,7 @@ const paragrafos = [
   "Terceiro Paragrafo",
   "Quarto Paragrafo",
 ];
-const conteudo = reactive({
-  signo: "",
-  texto: [],
-  user: 0,
-  semana: 0,
-});
+
 </script>
 <template>
     <div>
