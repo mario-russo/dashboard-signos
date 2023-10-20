@@ -87,7 +87,7 @@ const paragrafos = [
           </q-tab-panel> -->
         </q-tab-panels>
       </div>
-      <q-tabs v-model="tab" class="text-teal" active-color="primary">
+      <q-tabs v-model="tab" class=" fixed-bottom bg-primary text-white " >
         <q-tab
         v-for="signo in signosDoZodiaco" :v-model="signo"
           :key="signo"
