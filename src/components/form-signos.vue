@@ -1,67 +1,48 @@
 <script setup lang="ts">
-import { ref} from "vue";
-const tab = ref("aries"); 
-const textareaModel = ref(""); 
-const signosDoZodiaco = [
-  "Áries",
-  "Touro",
-  "Gêmeos",
-  "Câncer",
-  "Leão",
-  "Virgem",
-  "Libra",
-  "Escorpião",
-  "Sagitário",
-  "Capricórnio",
-  "Aquário",
-  "Peixes",
-];
-const paragrafos = [
-  "Primeiro Paragrafo",
-  "Segundo Paragrafo",
-  "Terceiro Paragrafo",
-  "Quarto Paragrafo",
-];
+import { onMounted, ref } from "vue";
+import { getAllSignos } from "../service/enumSignos";
 
+const signo = ref(null)
+const conteudo = ref(null)
+const referencia = ref(null)
+const accept = ref(false)
+const optionSignos = ref();
+
+onMounted(async () => {
+  optionSignos.value = await getAllSignos()
+})
 </script>
 <template>
-    <div>
-        <q-card>
-            <div>
-              <q-tab-panels
-                v-model="tab"
-                v-for="signo in signosDoZodiaco"
-                :key="signo"
-              >
-                <q-tab-panel :name="signo" animated>
-                  <div class="text-h5 text-center">{{ signo }}</div>
-                  <div class="mt-3" v-for="paragrafo in paragrafos" :key="paragrafo">
-                    <div class="text-h6">{{ paragrafo }}</div>
-                    <q-input v-model="textareaModel" hint="" filled autogrow label="">
-                      <template v-slot:label>
-                        <div class="row items-center all-pointer-events">
-                          {{ paragrafo }}
-                        </div>
-                      </template>
-                    </q-input>
-                  </div>
-                </q-tab-panel>
-              </q-tab-panels>
-            </div>
-            <q-tabs v-model="tab" class="fixed-bottom bg-primary text-white">
-              <q-tab
-                v-for="signo in signosDoZodiaco"
-                :v-model="signo"
-                :key="signo"
-                :name="signo"
-                :label="signo"
-              />
-            </q-tabs>
-          </q-card>
-    </div>
+  <div>
+    <section class="centro">
+      <q-form class="q-gutter-md">
+        <q-select v-model="signo" :options="optionSignos" color="purple-12" label="Selecione o Signo">
+          <template v-slot:prepend>
+            <q-icon name="event" />
+          </template>
+        </q-select>
+        <q-input v-model="referencia" label="Referência*" hint="Name and surname" lazy-rules
+          :rules="[val => val && val.length > 0 || 'Please type something']" />
+
+
+        <q-input v-model="conteudo" type="textarea" label="Digite o Texto Do Signo" />
+        <q-toggle v-model="accept" label="I accept the license and terms" />
+
+        <div>
+          <q-btn label="Submit" type="submit" color="primary" />
+          <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+        </div>
+      </q-form>
+
+    </section>
+
+  </div>
 </template>
 
 
 <style scoped>
-
+.centro {
+  width: 800px;
+  margin: 50px auto;
+}
 </style>
