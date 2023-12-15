@@ -2,9 +2,11 @@
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
 import { authStore } from "../store/auth";
+import { userStore } from "../store/user";
 import { login } from "../service/authService";
 
 const store = authStore();
+const storeUser = userStore();
 const router = useRouter();
 
 const user = reactive({ email: "mario.russo93@hotmail.com", senha: "1234" });
@@ -14,6 +16,7 @@ async function logar() {
   if (result) {
     router.push({ name: "home" });
     store.setToken(result.token);
+    storeUser.setUsuario({ id: result.id, nome: result.nome })
   }
 }
 </script>
