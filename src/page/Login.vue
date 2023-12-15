@@ -30,13 +30,7 @@ async function logar() {
         <q-input v-model="user.senha" label="Senha" />
       </div>
       <div class="inp">
-        <q-btn
-          class="btn"
-          color="white"
-          text-color="black"
-          label="Enviar"
-          @click="logar"
-        />
+        <q-btn class="btn" color="white" text-color="black" label="Enviar" @click="logar" />
       </div>
     </div>
   </section>
@@ -52,15 +46,18 @@ async function logar() {
   align-items: center;
   margin: 0 auto;
 }
+
 .login-container div {
   width: 100%;
   max-width: 600px;
   padding: 10px;
 }
+
 .login-container div .inp {
   width: 100%;
   margin-top: 10px;
 }
+
 .btn {
   width: 100%;
 }
