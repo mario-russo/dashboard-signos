@@ -1,4 +1,4 @@
-import Home from '../page/Home.vue'
+import usuario from '../page/usuario.vue'
 import NotFound from '../page/NotFound.vue'
 import Login from '../page/Login.vue'
 import DefaultLayout from '../layout/DefaultLayout.vue'
@@ -10,9 +10,9 @@ const routes = [
         name: 'dashboard',
         component: DefaultLayout,
         children: [{
-            path: '/home',
-            name: 'home',
-            component: Home,
+            path: '/usaurio',
+            name: 'usuario',
+            component: usuario,
         },
         {
             path: '/post-signos',
