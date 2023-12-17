@@ -9,7 +9,14 @@ export interface Conteudo {
     idUsuario: number
 
 }
-export interface Usuario {
+export interface UsuarioStore {
     nome: string,
     id: number
+}
+export interface Usuario {
+    id: number,
+    nome: string,
+    email: string,
+    roles: string[],
+    senha: string
 }
