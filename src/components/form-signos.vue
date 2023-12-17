@@ -44,7 +44,7 @@ const layout = ref(false)
           <section align="right"><q-btn color="white" text-color="black" label="Adicionar de Conteudo"
               @click="lista = !lista" />
           </section>
-          <q-table flat bordered title="Treats" :rows="conteudos" :columns="columns" row-key="name">
+          <q-table flat bordered title="LISTA DE CONTÉUDO" :rows="conteudos" :columns="columns" row-key="name">
             <template v-slot:body-cell-editar="props">
               <q-td :props="props">
                 <div>
@@ -100,9 +100,4 @@ const layout = ref(false)
 </template>
 
 
-<style scoped>
-.centro {
-  width: 800px;
-  margin: 50px auto;
-}
-</style>
+<style scoped></style>
