@@ -14,7 +14,7 @@ const user = reactive({ email: "mario.russo93@hotmail.com", senha: "1234" });
 async function logar() {
   const result = await login(user);
   if (result) {
-    router.push({ name: "home" });
+    router.push({ name: "usuario" });
     store.setToken(result.token);
     storeUser.setUsuario({ id: result.id, nome: result.nome })
   }
