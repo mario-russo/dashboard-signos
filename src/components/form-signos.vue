@@ -2,24 +2,84 @@
 import { onMounted, reactive, ref } from "vue";
 import { getAllSignos } from "../service/enumSignos";
 import { Conteudo } from "../types";
-import { salvar, listaAllCunteudo } from "../service/conteudoService";
+import { salvar, listaAllCunteudo, deleteConteudo } from "../service/conteudoService";
 import { userStore } from "../store/user";
-import { QTableColumn } from "quasar";
+import { Loading, Notify, QTableColumn } from "quasar";
 
-const user = userStore()
+const user = userStore().getUsuario
 
-const conteudo = reactive<Conteudo>({ conteudo: '', idUsuario: user.getUsuario.id, referencia: '', signo: '' })
-const accept = ref(false)
+const conteudo = reactive<Conteudo>({ conteudo: '', idUsuario: user.id, referencia: '', signo: '', id: 0 })
 const optionSignos = ref();
 const lista = ref(false)
 
 onMounted(async () => {
-  optionSignos.value = await getAllSignos()
-  conteudos.value = await listaAllCunteudo()
+  loadingPage()
 })
+async function loadingPage() {
+  Loading.show()
+  try {
+
+    optionSignos.value = await getAllSignos()
+    conteudos.value = await listaAllCunteudo()
+    Loading.hide()
+  } catch (error) {
+    Notify.create({
+      message: 'Erro ao carregar a pagina',
+      type: 'negative'
+    })
+    Loading.hide()
+  } finally {
+    Loading.hide()
+  }
+}
 
 async function salvarConteudo() {
-  await salvar(conteudo)
+  try {
+    await salvar(conteudo)
+    lista.value = !lista
+    Notify.create({
+      message: 'Conteudo salvo com sucesso!!!',
+      position: 'center',
+      color: 'light-green-5'
+    })
+    loadingPage()
+  } catch (error) {
+    Notify.create({
+      message: 'Erro ao salvar',
+      type: 'negative',
+      position: 'center'
+    })
+  }
+
+}
+async function removeConteudo(conteudoTable: Conteudo) {
+  let conteudodelete = conteudoTable;
+  Loading.show
+  try {
+    await deleteConteudo(conteudodelete)
+    loadingPage()
+    lista.value = !lista
+    Notify.create({
+      message: 'Conteudo salvo com sucesso!!!',
+      position: 'center',
+      color: 'light-green-5'
+    })
+    Loading.hide()
+  } catch (error) {
+    Notify.create({
+      message: 'Erro ao salvar',
+      type: 'negative',
+      position: 'center'
+    })
+  }
+
+
+}
+function onReset() {
+  conteudo.conteudo = ''
+  conteudo.referencia = ''
+  conteudo.signo = ''
+  lista.value = !lista
 
 }
 const conteudos = ref()
@@ -55,14 +115,14 @@ const layout = ref(false)
             <template v-slot:body-cell-remover="props">
               <q-td :props="props">
                 <div>
-                  <q-btn icon="delete" size="sm" color="negative" />
+                  <q-btn icon="delete" size="sm" color="negative" @click="removeConteudo(props.row)" />
                 </div>
               </q-td>
             </template>
           </q-table>
         </div>
       </section>
-      <q-dialog v-model="lista">
+      <q-dialog v-model="lista" @before-hide="onReset">
         <q-layout view="Lhh lpR fff" container class="bg-white text-dark">
           <q-header class="bg-primary">
             <q-toolbar>
@@ -73,21 +133,26 @@ const layout = ref(false)
           <q-page-container>
             <q-page padding>
               <section class="q-gutter-md">
-                <q-select v-model="conteudo.signo" :options="optionSignos" color="purple-12" label="Selecione o Signo">
+                <q-select required v-model="conteudo.signo" :options="optionSignos" color="purple-12"
+                  label="Selecione o Signo" :rules="[
+                    val => val !== null && val !== '' || 'Escolha um Signo',
+                  ]">
                   <template v-slot:prepend>
                     <q-icon name="event" />
                   </template>
                 </q-select>
-                <q-input v-model="conteudo.referencia" label="Referência*" hint="Name and surname" lazy-rules
-                  :rules="[val => val && val.length > 0 || 'Please type something']" />
+                <q-input v-model="conteudo.referencia" label="Referência*" hint="Referencia Do Signo" lazy-rules
+                  :rules="[val => val && val.length > 0 || 'Não Pode Ser Vázio']" />
 
 
-                <q-input v-model="conteudo.conteudo" type="textarea" label="Digite o Texto Do Signo" />
-                <q-toggle v-model="accept" label="I accept the license and terms" />
+                <q-input v-model="conteudo.conteudo" type="textarea" label="Digite o Texto Do Signo" :rules="[
+                  val => val !== null && val !== '' || 'Não Pode Ser Vázio',
+                  val => val < 500 || 'Minimo 500 Letras'
+                ]" />
 
                 <div>
                   <q-btn label="Submit" type="submit" color="primary" @click="salvarConteudo" />
-                  <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+                  <q-btn label="Reset" type="reset" color="primary" @click="onReset" flat class="q-ml-sm" />
                 </div>
               </section>
             </q-page>
@@ -95,7 +160,6 @@ const layout = ref(false)
         </q-layout>
       </q-dialog>
     </section>
-
   </div>
 </template>
 
