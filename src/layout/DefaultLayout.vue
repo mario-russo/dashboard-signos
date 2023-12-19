@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import rotas from "../router/routes";
 import { ref } from "vue";
+import { routesMenu } from "../router/routes";
+import { userStore } from "../store/user";
+
 const leftDrawerOpen = ref(true);
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
+const storeUser = userStore()
 
-const rota = rotas;
+const rota = routesMenu;
 </script>
 <template>
   <div>
@@ -17,9 +20,7 @@ const rota = rotas;
 
           <q-toolbar-title>
             <q-avatar>
-              <img
-                src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg"
-              />
+              <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
             </q-avatar>
             Dashboard Signos
           </q-toolbar-title>
@@ -30,7 +31,7 @@ const rota = rotas;
         <q-list v-for="link in rota">
           <q-item clickable v-close-popup>
             <q-item-section>
-              <router-link class="link"  :to="link.path">{{ link.name }}</router-link>
+              <router-link class="link" :to="link.path">{{ link.name }}</router-link>
             </q-item-section>
           </q-item>
           <q-list v-for="nav in link.children">
@@ -44,6 +45,10 @@ const rota = rotas;
           </q-list>
           <q-separator />
         </q-list>
+        <q-badge align="bottom">
+
+          {{ storeUser.getUsuario }}
+        </q-badge>
       </q-drawer>
 
       <q-page-container>
@@ -56,11 +61,13 @@ const rota = rotas;
 <style scoped>
 .link {
   /* Adicione estilos desejados aqui */
-  color: rgb(33, 33, 36); /* Exemplo: tornar o texto azul */
+  color: rgb(33, 33, 36);
+  /* Exemplo: tornar o texto azul */
   text-decoration: none;
-   /* Exemplo: sublinhar o texto */
+  /* Exemplo: sublinhar o texto */
 }
-a.router-link-active{
+
+a.router-link-active {
   color: rgb(33, 33, 36);
   background-color: rgb(247, 240, 255);
 }
