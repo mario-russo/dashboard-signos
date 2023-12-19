@@ -12,8 +12,13 @@ export const userStore = defineStore('user', () => {
     function setUsuario(usuario: UsuarioStore) {
         user.id = usuario.id
         user.nome = usuario.nome
+        localStorage.setItem('user-signos', JSON.stringify(user))
+
     }
-    const getUsuario = computed(() => user)
+    const getUsuario = computed(() => {
+        const user = localStorage.getItem('user-signos')
+        if (user) return JSON.parse(user)
+    })
 
     return { setUsuario, getUsuario }
 })
