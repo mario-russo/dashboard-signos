@@ -3,6 +3,7 @@ export interface UserLogin {
     senha: string
 }
 export interface Conteudo {
+    id: number
     conteudo: string,
     signo: string,
     referencia: string,
