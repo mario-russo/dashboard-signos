@@ -3,7 +3,7 @@ import './style.css'
 import App from './App.vue'
 import { createPinia } from 'pinia'
 
-import { Quasar } from 'quasar'
+import { Notify, Quasar, Loading } from 'quasar'
 
 import router from './router'
 
@@ -19,5 +19,8 @@ import 'quasar/src/css/index.sass'
 
 
 createApp(App).use(createPinia()).use(router).use(Quasar, {
-    plugins: {}, // import Quasar plugins and add here
+    plugins: {
+        Notify,
+        Loading
+    }, // import Quasar plugins and add here
 }).mount('#app')
