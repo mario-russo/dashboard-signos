@@ -2,21 +2,21 @@
 import { onMounted, ref, reactive } from "vue";
 import { verify } from "../service/authService";
 import { Usuario } from "../types";
-import { salvar } from "../service/usuarioService";
+import { listaTodosUsuarios, salvar, deletaUsuario, autualizarUsuario } from "../service/usuarioService";
 import { QTableColumn } from "quasar/dist/types/api/qtable";
+import { Loading, Notify } from "quasar";
 
 
 
-// const token = ref(localStorage.getItem('token'));
 
 const lista = ref(false)
-const usuarios = reactive<Usuario[]>([])
+const usuarios = ref()
 
 const usuario = reactive<Usuario>({
   id: 0,
-  email: "",
   nome: "",
-  roles: [],
+  email: "",
+  rule: [],
   senha: ""
 })
 
@@ -28,11 +28,58 @@ async function verifica() {
 }
 
 onMounted(async () => {
-  console.log(await verifica())
+  await loadPage()
 });
+async function loadPage() {
+  Loading.show()
+  try {
+    usuarios.value = await listaTodosUsuarios()
+    Loading.hide()
+  } catch (error) {
+    Notify.create({
+      type: "negative",
+      message: "Erro ao Listar Usuário!!!"
+    })
+    Loading.hide()
+  } finally {
+    Loading.hide()
+  }
+}
 
 async function salvarUsuario() {
-  salvar(usuario)
+  Loading.show()
+  try {
+    await salvar(usuario)
+    await loadPage()
+    Loading.hide()
+    Notify.create({
+      type: "positive",
+      message: "Usuário salvo com sucesso!!!"
+    })
+    lista.value = !lista
+  } catch (error) {
+    Loading.hide()
+    Notify.create({
+      type: "negative",
+      message: "Erro ao salvar Usuário"
+    })
+  }
+}
+async function deletar(usuario: Usuario) {
+  try {
+    Loading.show()
+    await deletaUsuario(usuario)
+    await loadPage()
+    Notify.create({
+      type: "positive",
+      message: "Usuário deletado com sucesso!!!"
+    })
+  } catch (error) {
+    Notify.create({
+      type: "negative",
+      message: "Erro ao deletar usuário" + error
+    })
+  }
 }
 
 const columns: QTableColumn[] = [
@@ -40,7 +87,7 @@ const columns: QTableColumn[] = [
   { name: 'id', field: 'id', align: 'left', label: 'Id', sortable: true },
   { name: 'nome', field: 'nome', align: 'left', label: 'Nome', sortable: true },
   { name: 'email', field: 'email', align: 'left', label: 'E-mail', sortable: true },
-  { name: 'roles', field: 'roles', align: 'left', label: 'Permissa', sortable: true },
+  { name: 'rules', field: 'rules', align: 'left', label: 'Permissa', sortable: true },
   { name: 'editar', field: 'editar', align: 'center', label: 'Editar', },
   { name: 'remover', field: 'remover', align: 'center', label: 'Deletar', },
 ]
@@ -56,15 +103,15 @@ const columns: QTableColumn[] = [
           <q-table flat bordered title="LISTA DE USUÁRIOS" :rows="usuarios" :columns="columns" row-key="name">
             <template v-slot:body-cell-editar="props">
               <q-td :props="props">
-                <!-- <div>
+                <div>
                   <q-btn icon="edit" size="sm" @click="layout = true" />
-                </div> -->
+                </div>
               </q-td>
             </template>
             <template v-slot:body-cell-remover="props">
               <q-td :props="props">
                 <div>
-                  <q-btn icon="delete" size="sm" color="negative" />
+                  <q-btn icon="delete" size="sm" color="negative" @click="deletar(props.row)" />
                 </div>
               </q-td>
             </template>
@@ -99,17 +146,18 @@ const columns: QTableColumn[] = [
                     :rules="[val => val && val.length > 0 || 'Senha Obrigatório']" />
 
 
-                  <q-select v-model="usuario.roles" :options="roles" color="purple-12" label="Permisão">
-                    <template v-slot:prepend>
-                      <q-icon name="person" />
-                    </template>
-                  </q-select>
+                  <div class="q-gutter-sm">
+                    <q-checkbox v-model="usuario.rule" val="ADMIN" label="Administrador" color="teal" />
+                    <q-checkbox v-model="usuario.rule" val="USUARIO" label="Usuario" color="teal" />
+                  </div>
 
                   <div>
                     <q-btn label="Submit" type="submit" color="primary" @click="salvarUsuario" />
                     <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
                   </div>
                 </section>
+
+                {{ usuario }}
               </q-page>
             </q-page-container>
           </q-layout>

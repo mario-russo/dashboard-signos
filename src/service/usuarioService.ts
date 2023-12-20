@@ -5,7 +5,7 @@ const usuariopath = "usuario"
 
 export async function salvar(usuario: Usuario) {
     try {
-        const resultado = api.post(usuariopath, usuario)
+        const resultado = api.post('auth/register', usuario)
         return (await resultado).data
 
     } catch (error) {
@@ -30,7 +30,7 @@ export async function autualizarUsuario(usuario: Usuario) {
 }
 export async function deletaUsuario(usuario: Usuario) {
     try {
-        const resultado = api.delete(usuariopath + usuario.id)
+        const resultado = api.delete(usuariopath + '/' + usuario.id, { data: usuario })
         return (await resultado).data
     } catch (error) {
 
