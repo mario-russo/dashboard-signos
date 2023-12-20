@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onMounted, ref, reactive } from "vue";
-import { verify } from "../service/authService";
 import { Usuario } from "../types";
 import { listaTodosUsuarios, salvar, deletaUsuario, autualizarUsuario } from "../service/usuarioService";
 import { QTableColumn } from "quasar/dist/types/api/qtable";
@@ -19,13 +18,6 @@ const usuario = reactive<Usuario>({
   rule: [],
   senha: ""
 })
-
-const roles = ["ADMIN", "USUARIO"]
-
-async function verifica() {
-  const result = await verify();
-  return result.data;
-}
 
 onMounted(async () => {
   await loadPage()
@@ -49,14 +41,26 @@ async function loadPage() {
 async function salvarUsuario() {
   Loading.show()
   try {
-    await salvar(usuario)
-    await loadPage()
-    Loading.hide()
-    Notify.create({
-      type: "positive",
-      message: "Usuário salvo com sucesso!!!"
-    })
-    lista.value = !lista
+    if (usuario.id === 0) {
+
+      await salvar(usuario)
+      await loadPage()
+      Loading.hide()
+      Notify.create({
+        type: "positive",
+        message: "Usuário salvo com sucesso!!!"
+      })
+      lista.value = !lista
+    } else {
+      await autualizarUsuario(usuario)
+      await loadPage()
+      Loading.hide()
+      Notify.create({
+        type: "positive",
+        message: "Usuário Atualizado com sucesso!!!"
+      })
+      lista.value = !lista
+    }
   } catch (error) {
     Loading.hide()
     Notify.create({
@@ -81,6 +85,21 @@ async function deletar(usuario: Usuario) {
     })
   }
 }
+async function editiUsuario(usuarioEdit: Usuario) {
+  lista.value = !lista.value
+  usuario.email = usuarioEdit.email
+  usuario.id = usuarioEdit.id
+  usuario.rule = usuario.rule
+  usuario.nome = usuarioEdit.nome
+}
+function onReset() {
+  usuario.email = ''
+  usuario.id = 0
+  usuario.nome = ''
+  usuario.rule = []
+  usuario.email = ''
+
+}
 
 const columns: QTableColumn[] = [
 
@@ -104,7 +123,7 @@ const columns: QTableColumn[] = [
             <template v-slot:body-cell-editar="props">
               <q-td :props="props">
                 <div>
-                  <q-btn icon="edit" size="sm" @click="layout = true" />
+                  <q-btn icon="edit" size="sm" @click="editiUsuario(props.row)" />
                 </div>
               </q-td>
             </template>
@@ -122,7 +141,7 @@ const columns: QTableColumn[] = [
 
 
       <div class="q-pa-md q-gutter-sm">
-        <q-dialog v-model="lista">
+        <q-dialog v-model="lista" @hide="onReset">
           <q-layout view="Lhh lpR fff" container class="bg-white text-dark">
             <q-header class="bg-primary">
               <q-toolbar>
@@ -153,11 +172,10 @@ const columns: QTableColumn[] = [
 
                   <div>
                     <q-btn label="Submit" type="submit" color="primary" @click="salvarUsuario" />
-                    <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+                    <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" @click="onReset" />
                   </div>
                 </section>
 
-                {{ usuario }}
               </q-page>
             </q-page-container>
           </q-layout>

@@ -22,10 +22,9 @@ export async function listaTodosUsuarios() {
 }
 export async function autualizarUsuario(usuario: Usuario) {
     try {
-        const resultado = await api.patch(usuariopath, usuario)
+        const resultado = await api.put(usuariopath + '/' + usuario.id, usuario)
         return resultado.data
     } catch (error) {
-
     }
 }
 export async function deletaUsuario(usuario: Usuario) {
