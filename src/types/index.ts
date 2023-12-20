@@ -21,6 +21,6 @@ export interface Usuario {
     id: number,
     nome: string,
     email: string,
-    roles: string[],
+    rule: string[],
     senha: string
 }
