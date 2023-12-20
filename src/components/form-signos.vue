@@ -2,7 +2,7 @@
 import { onMounted, reactive, ref } from "vue";
 import { getAllSignos } from "../service/enumSignos";
 import { Conteudo } from "../types";
-import { salvar, listaAllCunteudo, deleteConteudo } from "../service/conteudoService";
+import { salvar, listaAllCunteudo, deleteConteudo, editConteudo } from "../service/conteudoService";
 import { userStore } from "../store/user";
 import { Loading, Notify, QTableColumn } from "quasar";
 
@@ -35,14 +35,27 @@ async function loadingPage() {
 
 async function salvarConteudo() {
   try {
-    await salvar(conteudo)
-    lista.value = !lista
-    Notify.create({
-      message: 'Conteudo salvo com sucesso!!!',
-      position: 'center',
-      color: 'light-green-5'
-    })
-    loadingPage()
+    if (conteudo.id === 0) {
+      await salvar(conteudo)
+      lista.value = !lista
+      await loadingPage()
+      Notify.create({
+        message: 'Conteudo Salvo com sucesso!!!',
+        position: 'center',
+        color: 'light-green-5'
+      })
+    } else {
+      await editConteudo(conteudo)
+      lista.value = !lista
+      await loadingPage()
+      Notify.create({
+        message: 'Conteudo Salvo com sucesso!!!',
+        position: 'center',
+        color: 'light-green-5'
+      })
+    }
+
+
   } catch (error) {
     Notify.create({
       message: 'Erro ao salvar',
@@ -75,7 +88,16 @@ async function removeConteudo(conteudoTable: Conteudo) {
 
 
 }
+async function conteudoEditForm(conteudoEdit: Conteudo) {
+  lista.value = !lista.value
+  conteudo.id = conteudoEdit.id
+  conteudo.conteudo = conteudoEdit.conteudo
+  conteudo.referencia = conteudoEdit.referencia
+  conteudo.signo = conteudoEdit.signo
+  console.log(conteudoEdit)
+}
 function onReset() {
+  conteudo.id = 0
   conteudo.conteudo = ''
   conteudo.referencia = ''
   conteudo.signo = ''
@@ -93,7 +115,6 @@ const columns: QTableColumn[] = [
   { name: 'editar', field: 'editar', align: 'center', label: 'Editar', },
   { name: 'remover', field: 'remover', align: 'center', label: 'Deletar', },
 ]
-const layout = ref(false)
 
 </script>
 <template>
@@ -108,7 +129,7 @@ const layout = ref(false)
             <template v-slot:body-cell-editar="props">
               <q-td :props="props">
                 <div>
-                  <q-btn icon="edit" size="sm" @click="layout = true" />
+                  <q-btn icon="edit" size="sm" @click="conteudoEditForm(props.row)" />
                 </div>
               </q-td>
             </template>

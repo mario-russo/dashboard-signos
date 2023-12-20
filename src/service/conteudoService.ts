@@ -15,3 +15,8 @@ export async function deleteConteudo(conteudo: Conteudo) {
     const resultado = api.delete(pathConteudo, { data: conteudo })
     return (await resultado).data
 }
+export async function editConteudo(conteudo: Conteudo) {
+
+    const resultado = api.put(pathConteudo, conteudo)
+    return (await resultado).data
+}

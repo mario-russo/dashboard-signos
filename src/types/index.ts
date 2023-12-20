@@ -7,7 +7,10 @@ export interface Conteudo {
     conteudo: string,
     signo: string,
     referencia: string,
-    idUsuario: number
+    idUsuario: number,
+    usuario?: {
+        id: number
+    }
 
 }
 export interface UsuarioStore {
