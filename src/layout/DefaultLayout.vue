@@ -45,10 +45,6 @@ const rota = routesMenu;
           </q-list>
           <q-separator />
         </q-list>
-        <q-badge align="bottom">
-
-          {{ storeUser.getUsuario }}
-        </q-badge>
       </q-drawer>
 
       <q-page-container>
@@ -65,10 +61,5 @@ const rota = routesMenu;
   /* Exemplo: tornar o texto azul */
   text-decoration: none;
   /* Exemplo: sublinhar o texto */
-}
-
-a.router-link-active {
-  color: rgb(33, 33, 36);
-  background-color: rgb(247, 240, 255);
 }
 </style>
