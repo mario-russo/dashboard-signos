@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { routesMenu } from "../router/routes";
-import { userStore } from "../store/user";
 
 const leftDrawerOpen = ref(true);
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
-const storeUser = userStore()
 
 const rota = routesMenu;
 </script>
