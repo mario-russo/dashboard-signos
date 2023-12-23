@@ -16,8 +16,16 @@ export const userStore = defineStore('user', () => {
 
     }
     const getUsuario = computed(() => {
-        const user = localStorage.getItem('user-signos')
-        if (user) return JSON.parse(user)
+        const userLocal = localStorage.getItem('user-signos')
+        // if (user) return JSON.parse(user)
+        if (userLocal === null) return user
+
+        let item: UsuarioStore = JSON.parse(userLocal)
+
+        user.id = item.id
+        user.nome = item.nome
+
+        return user
     })
 
     return { setUsuario, getUsuario }
