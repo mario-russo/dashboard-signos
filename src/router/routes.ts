@@ -7,19 +7,31 @@ import PostSignosVue from '../page/PostSignos.vue'
 export const routesMenu = [
     {
         path: '/',
-        name: 'dashboard',
+        name: 'Dashboard',
         component: DefaultLayout,
+        meta: {
+            autenticacao: true
+        },
         children: [{
-            path: '/usaurio',
-            name: 'usuario',
+            path: 'usuario',
+            name: 'Usuário',
             component: usuario,
+            meta: {
+                autenticacao: true
+            }
         },
         {
-            path: '/post-signos',
-            name: 'post',
+            path: '/conteudo',
+            name: 'Conteúdo',
             component: PostSignosVue,
+
+            meta: {
+                autenticacao: true
+            }
         }
-        ]
+        ],
+
+
     },
 
 

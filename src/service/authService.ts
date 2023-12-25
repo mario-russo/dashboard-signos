@@ -10,6 +10,11 @@ export async function login(user: UserLogin) {
 }
 
 export async function verify() {
-    const resposta = await api.get(verifyPath)
-    return resposta.data
+    try {
+        const resposta = await api.get(verifyPath)
+        return resposta.data.acesso
+
+    } catch (error) {
+        return false
+    }
 }
