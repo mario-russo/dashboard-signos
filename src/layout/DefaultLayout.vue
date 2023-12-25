@@ -1,7 +1,18 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { routesMenu } from "../router/routes";
-
+import { authStore } from '../store/auth'
+import { userStore } from '../store/user'
+import { useRouter } from "vue-router";
+const router = useRouter()
+const { setToken } = authStore()
+const { setUsuario } = userStore()
+const usuario = userStore().getUsuario
+function logout() {
+  setToken('')
+  setUsuario({ id: 0, nome: '' })
+  router.push({ path: '/auth/login' })
+}
 const leftDrawerOpen = ref(true);
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
@@ -22,6 +33,10 @@ const rota = routesMenu;
             </q-avatar>
             Dashboard Signos
           </q-toolbar-title>
+          <q-separator />
+          {{ usuario.nome }}
+          <q-separator />
+          <q-btn dense flat round icon="exit_to_app" @click="logout" />
         </q-toolbar>
       </q-header>
 
