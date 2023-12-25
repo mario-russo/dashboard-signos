@@ -5,11 +5,8 @@ import { listaTodosUsuarios, salvar, deletaUsuario, autualizarUsuario } from "..
 import { QTableColumn } from "quasar/dist/types/api/qtable";
 import { Loading, Notify } from "quasar";
 
-
-
-
 const lista = ref(false)
-const usuarios = ref()
+const usuarios = ref([])
 
 const usuario = reactive<Usuario>({
   id: 0,
