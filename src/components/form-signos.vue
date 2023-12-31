@@ -2,141 +2,179 @@
 import { onMounted, reactive, ref } from "vue";
 import { getAllSignos } from "../service/enumSignos";
 import { Conteudo } from "../types";
-import { salvar, listaAllCunteudo, deleteConteudo, editConteudo } from "../service/conteudoService";
+import {
+  salvar,
+  listaAllCunteudo,
+  deleteConteudo,
+  editConteudo,
+} from "../service/conteudoService";
 import { userStore } from "../store/user";
 import { Loading, Notify, QTableColumn } from "quasar";
 
-const user = userStore().getUsuario
+const user = userStore().getUsuario;
 
-const conteudo = reactive<Conteudo>({ conteudo: '', idUsuario: user.id, referencia: '', signo: '', id: 0 })
+const conteudo = reactive<Conteudo>({
+  conteudo: "",
+  idUsuario: user.id,
+  referencia: 0,
+  tipo: "",
+  signo: "",
+  id: 0,
+});
 const optionSignos = ref();
-const lista = ref(false)
+const lista = ref(false);
 
 onMounted(async () => {
-  loadingPage()
-})
+  loadingPage();
+});
 async function loadingPage() {
-  Loading.show()
+  Loading.show();
   try {
-
-    optionSignos.value = await getAllSignos()
-    conteudos.value = await listaAllCunteudo()
-    Loading.hide()
+    optionSignos.value = await getAllSignos();
+    conteudos.value = await listaAllCunteudo();
+    Loading.hide();
   } catch (error) {
     Notify.create({
-      message: 'Erro ao carregar a pagina',
-      type: 'negative'
-    })
-    Loading.hide()
+      message: "Erro ao carregar a pagina",
+      type: "negative",
+    });
+    Loading.hide();
   } finally {
-    Loading.hide()
+    Loading.hide();
   }
 }
 
 async function salvarConteudo() {
   try {
     if (conteudo.id === 0) {
-      await salvar(conteudo)
-      lista.value = !lista
-      await loadingPage()
+      await salvar(conteudo);
+      lista.value = !lista;
+      await loadingPage();
       Notify.create({
-        message: 'Conteudo Salvo com sucesso!!!',
-        position: 'center',
-        color: 'light-green-5'
-      })
+        message: "Conteudo Salvo com sucesso!!!",
+        position: "center",
+        color: "light-green-5",
+      });
     } else {
-      await editConteudo(conteudo)
-      lista.value = !lista
-      await loadingPage()
+      await editConteudo(conteudo);
+      lista.value = !lista;
+      await loadingPage();
       Notify.create({
-        message: 'Conteudo Salvo com sucesso!!!',
-        position: 'center',
-        color: 'light-green-5'
-      })
+        message: "Conteudo Salvo com sucesso!!!",
+        position: "center",
+        color: "light-green-5",
+      });
     }
-
-
   } catch (error) {
     Notify.create({
-      message: 'Erro ao salvar',
-      type: 'negative',
-      position: 'center'
-    })
+      message: "Erro ao salvar",
+      type: "negative",
+      position: "center",
+    });
   }
-
 }
 async function removeConteudo(conteudoTable: Conteudo) {
   let conteudodelete = conteudoTable;
-  Loading.show
+  Loading.show;
   try {
-    await deleteConteudo(conteudodelete)
-    loadingPage()
-    lista.value = !lista
+    await deleteConteudo(conteudodelete);
+    loadingPage();
+    lista.value = !lista;
     Notify.create({
-      message: 'Conteudo salvo com sucesso!!!',
-      position: 'center',
-      color: 'light-green-5'
-    })
-    Loading.hide()
+      message: "Conteudo salvo com sucesso!!!",
+      position: "center",
+      color: "light-green-5",
+    });
+    Loading.hide();
   } catch (error) {
     Notify.create({
-      message: 'Erro ao salvar',
-      type: 'negative',
-      position: 'center'
-    })
+      message: "Erro ao salvar",
+      type: "negative",
+      position: "center",
+    });
   }
-
-
 }
 async function conteudoEditForm(conteudoEdit: Conteudo) {
-  lista.value = !lista.value
-  conteudo.id = conteudoEdit.id
-  conteudo.conteudo = conteudoEdit.conteudo
-  conteudo.referencia = conteudoEdit.referencia
-  conteudo.signo = conteudoEdit.signo
-  console.log(conteudoEdit)
+  lista.value = !lista.value;
+  conteudo.id = conteudoEdit.id;
+  conteudo.conteudo = conteudoEdit.conteudo;
+  conteudo.referencia = conteudoEdit.referencia;
+  conteudo.signo = conteudoEdit.signo;
+  conteudo.tipo = conteudoEdit.tipo;
 }
 function onReset() {
-  conteudo.id = 0
-  conteudo.conteudo = ''
-  conteudo.referencia = ''
-  conteudo.signo = ''
-  lista.value = !lista
-
+  conteudo.id = 0;
+  conteudo.conteudo = "";
+  conteudo.referencia = 0;
+  conteudo.signo = "";
+  conteudo.tipo = "";
+  lista.value = !lista;
 }
-const conteudos = ref()
-
+const conteudos = ref();
 
 const columns: QTableColumn[] = [
-
-  { name: 'id', field: 'id', align: 'left', label: 'Id', sortable: true },
-  { name: 'referencia', field: 'referencia', align: 'left', label: 'Referência', sortable: true },
-  { name: 'signo', field: 'signo', align: 'left', label: 'Signo', sortable: true },
-  { name: 'editar', field: 'editar', align: 'center', label: 'Editar', },
-  { name: 'remover', field: 'remover', align: 'center', label: 'Deletar', },
-]
-
+  { name: "id", field: "id", align: "left", label: "Id", sortable: true },
+  { name: "tipo", field: "tipo", align: "left", label: "tipo", sortable: true },
+  {
+    name: "referencia",
+    field: "referencia",
+    align: "left",
+    label: "Referência",
+    sortable: true,
+  },
+  {
+    name: "signo",
+    field: "signo",
+    align: "left",
+    label: "Signo",
+    sortable: true,
+  },
+  { name: "editar", field: "editar", align: "center", label: "Editar" },
+  { name: "remover", field: "remover", align: "center", label: "Deletar" },
+];
+const tipo = ref(["SEMANA", "MES", "ANO"]);
 </script>
 <template>
   <div>
     <section class="centro">
       <section>
         <div class="q-pa-md">
-          <section align="right"><q-btn color="white" text-color="black" label="Adicionar de Conteudo"
-              @click="lista = !lista" />
+          <section align="right">
+            <q-btn
+              color="white"
+              text-color="black"
+              label="Adicionar de Conteudo"
+              @click="lista = !lista"
+            />
           </section>
-          <q-table flat bordered title="LISTA DE CONTÉUDO" :rows="conteudos" :columns="columns" row-key="name">
+          <q-table
+            flat
+            bordered
+            title="LISTA DE CONTÉUDO"
+            :rows="conteudos"
+            :columns="columns"
+            row-key="name"
+          >
             <template v-slot:body-cell-editar="props">
               <q-td :props="props">
                 <div>
-                  <q-btn icon="edit" size="sm" @click="conteudoEditForm(props.row)" />
+                  <q-btn
+                    icon="edit"
+                    size="sm"
+                    @click="conteudoEditForm(props.row)"
+                  />
                 </div>
               </q-td>
             </template>
             <template v-slot:body-cell-remover="props">
               <q-td :props="props">
                 <div>
-                  <q-btn icon="delete" size="sm" color="negative" @click="removeConteudo(props.row)" />
+                  <q-btn
+                    icon="delete"
+                    size="sm"
+                    color="negative"
+                    @click="removeConteudo(props.row)"
+                  />
                 </div>
               </q-td>
             </template>
@@ -154,26 +192,70 @@ const columns: QTableColumn[] = [
           <q-page-container>
             <q-page padding>
               <section class="q-gutter-md">
-                <q-select required v-model="conteudo.signo" :options="optionSignos" color="purple-12"
-                  label="Selecione o Signo" :rules="[
-                    val => val !== null && val !== '' || 'Escolha um Signo',
-                  ]">
+                <q-select
+                  required
+                  v-model="conteudo.signo"
+                  :options="optionSignos"
+                  color="purple-12"
+                  label="Selecione o Signo"
+                  :rules="[
+                    (val) => (val !== null && val !== '') || 'Escolha um Signo',
+                  ]"
+                >
                   <template v-slot:prepend>
                     <q-icon name="event" />
                   </template>
                 </q-select>
-                <q-input v-model="conteudo.referencia" label="Referência*" hint="Referencia Do Signo" lazy-rules
-                  :rules="[val => val && val.length > 0 || 'Não Pode Ser Vázio']" />
 
+                <q-select
+                  required
+                  clearable
+                  v-model="conteudo.tipo"
+                  :options="tipo"
+                  color="purple-12"
+                  label="Selecione Semana, Mês ou Ano"
+                  :rules="[
+                    (val) => (val !== null && val !== '') || ' Escolha o tipo',
+                  ]"
+                >
+                </q-select>
 
-                <q-input v-model="conteudo.conteudo" type="textarea" label="Digite o Texto Do Signo" :rules="[
-                  val => val !== null && val !== '' || 'Não Pode Ser Vázio',
-                  val => val < 500 || 'Minimo 500 Letras'
-                ]" />
+                <q-input
+                  v-model="conteudo.referencia"
+                  label="Referência*"
+                  hint="Referencia Do Signo"
+                  lazy-rules
+                  :rules="[
+                    (val) => (val && val.length > 0) || 'Não Pode Ser Vázio',
+                  ]"
+                />
+
+                <q-input
+                  v-model="conteudo.conteudo"
+                  type="textarea"
+                  label="Digite o Texto Do Signo"
+                  :rules="[
+                    (val) =>
+                      (val !== null && val !== '') || 'Não Pode Ser Vázio',
+                    (val) => val < 500 || 'Minimo 500 Letras',
+                  ]"
+                />
 
                 <div>
-                  <q-btn label="Submit" type="submit" color="primary" @click="salvarConteudo" />
-                  <q-btn label="Reset" type="reset" color="primary" @click="onReset" flat class="q-ml-sm" />
+                  <q-btn
+                    label="Submit"
+                    type="submit"
+                    color="primary"
+                    @click="salvarConteudo"
+                  />
+                  <q-btn
+                    label="Reset"
+                    type="reset"
+                    color="primary"
+                    @click="onReset"
+                    flat
+                    class="q-ml-sm"
+                  />
                 </div>
               </section>
             </q-page>
@@ -183,6 +265,5 @@ const columns: QTableColumn[] = [
     </section>
   </div>
 </template>
-
 
 <style scoped></style>
