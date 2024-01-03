@@ -25,7 +25,7 @@ const optionSignos = ref();
 const lista = ref(false);
 
 onMounted(async () => {
-  loadingPage();
+  await loadingPage();
 });
 async function loadingPage() {
   Loading.show();
@@ -221,6 +221,7 @@ const tipo = ref(["SEMANA", "MES", "ANO"]);
                 </q-select>
 
                 <q-input
+                  type="number"
                   v-model="conteudo.referencia"
                   label="Referência*"
                   hint="Referencia Do Signo"
