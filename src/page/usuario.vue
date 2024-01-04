@@ -7,11 +7,10 @@ import {
   deletaUsuario,
   autualizarUsuario,
 } from "../service/usuarioService";
-import { QTableColumn } from "quasar/dist/types/api/qtable";
-import { Loading, Notify } from "quasar";
+import { Loading, Notify, QTableColumn } from "quasar";
 
 const lista = ref(false);
-const usuarios = ref([]);
+const usuarios = ref();
 
 const usuario = reactive<Usuario>({
   id: 0,
@@ -21,9 +20,6 @@ const usuario = reactive<Usuario>({
   senha: "",
 });
 
-onMounted(async () => {
-  await loadPage();
-});
 async function loadPage() {
   try {
     Loading.show();
@@ -119,6 +115,9 @@ const columns: QTableColumn[] = [
   { name: "editar", field: "editar", align: "center", label: "Editar" },
   { name: "remover", field: "remover", align: "center", label: "Deletar" },
 ];
+onMounted(async () => {
+  await loadPage();
+});
 </script>
 <template>
   <div>
