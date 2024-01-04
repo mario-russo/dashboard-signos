@@ -8,8 +8,8 @@ export async function salvar(usuario: Usuario) {
   return (await resultado).data;
 }
 export async function listaTodosUsuarios() {
-  const resultado = api.get(usuariopath);
-  return (await resultado).data;
+  const resultado = await api.get(usuariopath);
+  return resultado.data;
 }
 export async function autualizarUsuario(usuario: Usuario) {
   const resultado = await api.put(usuariopath + "/" + usuario.id, usuario);
