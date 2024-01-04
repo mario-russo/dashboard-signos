@@ -1,4 +1,4 @@
-import usuario from "../page/usuario.vue";
+import usuario from "../page/usuarioCadastro.vue";
 import NotFound from "../page/NotFound.vue";
 import Login from "../page/Login.vue";
 import DefaultLayout from "../layout/DefaultLayout.vue";
