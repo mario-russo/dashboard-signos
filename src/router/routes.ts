@@ -1,29 +1,44 @@
-import Home from '../page/Home.vue'
+import usuario from '../page/usuario.vue'
 import NotFound from '../page/NotFound.vue'
 import Login from '../page/Login.vue'
 import DefaultLayout from '../layout/DefaultLayout.vue'
 import PostSignosVue from '../page/PostSignos.vue'
 
-const routes = [
+export const routesMenu = [
     {
         path: '/',
-        name: 'dashboard',
+        name: 'Dashboard',
         component: DefaultLayout,
+        meta: {
+            autenticacao: true
+        },
         children: [{
-            path: '/home',
-            name: 'home',
-            component: Home,
+            path: 'usuario',
+            name: 'Usuário',
+            component: usuario,
+            meta: {
+                autenticacao: true
+            }
         },
         {
-            path: '/post-signos',
-            name: 'post',
+            path: '/conteudo',
+            name: 'Conteúdo',
             component: PostSignosVue,
+
+            meta: {
+                autenticacao: true
+            }
         }
-        ]
+        ],
+
+
     },
-    { path: '/auth/login', name: 'login', component: Login },
-    { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
+
 
 ]
-
+const routesSimple = [
+    { path: '/auth/login', name: 'login', component: Login },
+    { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
+]
+const routes = [...routesMenu, ...routesSimple]
 export default routes
