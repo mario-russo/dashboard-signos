@@ -268,3 +268,4 @@ const tipo = ref(["SEMANA", "MES", "ANO"]);
 </template>
 
 <style scoped></style>
+>>>>>>> 7e7c38e1c96810770edb294cc81e93223ca1bedf
