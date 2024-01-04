@@ -167,88 +167,86 @@ onMounted(async () => {
         </div>
       </section>
 
-      <div class="q-pa-md q-gutter-sm">
-        <q-dialog v-model="lista" @hide="onReset">
-          <q-layout view="Lhh lpR fff" container class="bg-white text-dark">
-            <q-header class="bg-primary">
-              <q-toolbar>
-                <q-btn flat round dense icon="edit" />
-                <q-toolbar-title>Cadrastro de Usuario</q-toolbar-title>
-                <q-btn flat v-close-popup round dense icon="close" />
-              </q-toolbar>
-            </q-header>
+      <q-dialog v-model="lista" @before-hide="onReset">
+        <q-layout view="Lhh lpR fff" container class="bg-white text-dark">
+          <q-header class="bg-primary">
+            <q-toolbar>
+              <q-btn flat round dense icon="edit" />
+              <q-toolbar-title>Cadrastro de Usuario</q-toolbar-title>
+              <q-btn flat v-close-popup round dense icon="close" />
+            </q-toolbar>
+          </q-header>
 
-            <q-page-container>
-              <q-page padding>
-                <section class="q-gutter-md">
-                  <q-input
-                    v-model="usuario.nome"
-                    label="Nome Do Usuario*"
-                    hint="Nome"
-                    lazy-rules
-                    :rules="[
-                      (val) => (val && val.length > 0) || 'Nome Obrigatório',
-                    ]"
+          <q-page-container>
+            <q-page padding>
+              <section class="q-gutter-md">
+                <q-input
+                  v-model="usuario.nome"
+                  label="Nome Do Usuario*"
+                  hint="Nome"
+                  lazy-rules
+                  :rules="[
+                    (val) => (val && val.length > 0) || 'Nome Obrigatório',
+                  ]"
+                />
+
+                <q-input
+                  v-model="usuario.email"
+                  label="E-mail Do Usuario*"
+                  hint="E-mail"
+                  lazy-rules
+                  :rules="[
+                    (val) => (val && val.length > 0) || 'E-mail Obrigatório',
+                  ]"
+                />
+
+                <q-input
+                  type="password"
+                  v-model="usuario.senha"
+                  label="Senha Do Usuario*"
+                  hint="Senha"
+                  lazy-rules
+                  :rules="[
+                    (val) => (val && val.length > 0) || 'Senha Obrigatório',
+                  ]"
+                />
+
+                <div class="q-gutter-sm">
+                  <q-checkbox
+                    v-model="usuario.rule"
+                    val="ADMIN"
+                    label="Administrador"
+                    color="teal"
                   />
-
-                  <q-input
-                    v-model="usuario.email"
-                    label="E-mail Do Usuario*"
-                    hint="E-mail"
-                    lazy-rules
-                    :rules="[
-                      (val) => (val && val.length > 0) || 'E-mail Obrigatório',
-                    ]"
+                  <q-checkbox
+                    v-model="usuario.rule"
+                    val="USUARIO"
+                    label="Usuario"
+                    color="teal"
                   />
+                </div>
 
-                  <q-input
-                    type="password"
-                    v-model="usuario.senha"
-                    label="Senha Do Usuario*"
-                    hint="Senha"
-                    lazy-rules
-                    :rules="[
-                      (val) => (val && val.length > 0) || 'Senha Obrigatório',
-                    ]"
+                <div>
+                  <q-btn
+                    label="Submit"
+                    type="submit"
+                    color="primary"
+                    @click="salvarUsuario"
                   />
-
-                  <div class="q-gutter-sm">
-                    <q-checkbox
-                      v-model="usuario.rule"
-                      val="ADMIN"
-                      label="Administrador"
-                      color="teal"
-                    />
-                    <q-checkbox
-                      v-model="usuario.rule"
-                      val="USUARIO"
-                      label="Usuario"
-                      color="teal"
-                    />
-                  </div>
-
-                  <div>
-                    <q-btn
-                      label="Submit"
-                      type="submit"
-                      color="primary"
-                      @click="salvarUsuario"
-                    />
-                    <q-btn
-                      label="Reset"
-                      type="reset"
-                      color="primary"
-                      flat
-                      class="q-ml-sm"
-                      @click="onReset"
-                    />
-                  </div>
-                </section>
-              </q-page>
-            </q-page-container>
-          </q-layout>
-        </q-dialog>
-      </div>
+                  <q-btn
+                    label="Reset"
+                    type="reset"
+                    color="primary"
+                    flat
+                    class="q-ml-sm"
+                    @click="onReset"
+                  />
+                </div>
+              </section>
+            </q-page>
+          </q-page-container>
+        </q-layout>
+      </q-dialog>
     </section>
   </div>
 </template>
