@@ -10,7 +10,6 @@ import {
 import { Loading, Notify, QTableColumn } from "quasar";
 
 const lista = ref(false);
-const usuarios = ref();
 
 const usuario = reactive<Usuario>({
   id: 0,
@@ -23,7 +22,7 @@ const usuario = reactive<Usuario>({
 async function loadPage() {
   Loading.show();
   try {
-    usuarios.value = await listaTodosUsuarios();
+    // usuarios.value = await listaTodosUsuarios();
     Loading.hide();
   } catch (error) {
     Notify.create({
@@ -115,6 +114,7 @@ const columns: QTableColumn[] = [
   { name: "editar", field: "editar", align: "center", label: "Editar" },
   { name: "remover", field: "remover", align: "center", label: "Deletar" },
 ];
+const usuarios = ref();
 onMounted(async () => {
   await loadPage();
 });
