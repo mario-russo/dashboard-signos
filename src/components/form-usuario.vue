@@ -5,6 +5,7 @@ import {
   salvar,
   deletaUsuario,
   autualizarUsuario,
+  listaTodosUsuarios,
 } from "../service/usuarioService";
 import { Loading, Notify, QTableColumn } from "quasar";
 
@@ -21,7 +22,7 @@ const usuario = reactive<Usuario>({
 async function loadPage() {
   Loading.show();
   try {
-    // usuarios.value = await listaTodosUsuarios();
+    usuarios.value = await listaTodosUsuarios();
     Loading.hide();
   } catch (error) {
     Notify.create({
