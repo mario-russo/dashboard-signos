@@ -12,15 +12,12 @@ export async function listaTodosUsuarios() {
   return (await resultado).data;
 }
 export async function autualizarUsuario(usuario: Usuario) {
-    const resultado = await api.put(usuariopath + "/" + usuario.id, usuario);
-    return resultado.data;
-  
+  const resultado = await api.put(usuariopath + "/" + usuario.id, usuario);
+  return resultado.data;
 }
 export async function deletaUsuario(usuario: Usuario) {
-  try {
-    const resultado = api.delete(usuariopath + "/" + usuario.id, {
-      data: usuario,
-    });
-    return (await resultado).data;
-  
+  const resultado = api.delete(usuariopath + "/" + usuario.id, {
+    data: usuario,
+  });
+  return (await resultado).data;
 }
