@@ -21,8 +21,8 @@ const usuario = reactive<Usuario>({
 });
 
 async function loadPage() {
+  Loading.show();
   try {
-    Loading.show();
     usuarios.value = await listaTodosUsuarios();
     Loading.hide();
   } catch (error) {
