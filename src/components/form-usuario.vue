@@ -2,7 +2,6 @@
 import { onMounted, ref, reactive } from "vue";
 import { Usuario } from "../types";
 import {
-  listaTodosUsuarios,
   salvar,
   deletaUsuario,
   autualizarUsuario,
